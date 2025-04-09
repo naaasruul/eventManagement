@@ -28,27 +28,29 @@ class SendReminders extends Command
      * Execute the console command.
      */
     public function handle()
-    {
-        // Get the current date and time
-        $currentDate = now();
+{
+    // Get the current date
+    $currentDate = now();
 
-        // Fetch events starting within the next 3 days
-        $events = Event::whereDate('date_start', '>=', $currentDate->toDateString())
-            ->whereDate('date_start', '<=', $currentDate->addDays(3)->toDateString())
+    // Get the date for 1 day before today
+    $reminderDate = $currentDate->addDay()->toDateString();
+
+    // Fetch events starting the next day (1 day before the event)
+    $events = Event::whereDate('date_start', '=', $reminderDate)->get();
+
+    foreach ($events as $event) {
+        // Fetch pending invitations for the event
+        $invitations = Invitation::where('event_id', $event->id)
+            ->where('rsvp_status', 'pending')
             ->get();
 
-        foreach ($events as $event) {
-            // Fetch pending invitations for the event
-            $invitations = Invitation::where('event_id', $event->id)
-                ->where('rsvp_status', 'pending')
-                ->get();
-
-            foreach ($invitations as $invitation) {
-                // Send reminder email
-                Mail::to($invitation->attendee_email)->send(new ReminderMail($invitation));
-            }
+        foreach ($invitations as $invitation) {
+            // Send reminder email
+            Mail::to($invitation->attendee_email)->send(new ReminderMail($invitation));
         }
-
-        $this->info('Reminders sent successfully.');
     }
+
+    $this->info('Reminders sent successfully.');
+}
+
 }
