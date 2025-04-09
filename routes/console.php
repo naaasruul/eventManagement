@@ -23,4 +23,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 // 
-Schedule::command('reminders:send')->everyTenSeconds();
+Schedule::command('reminders:send')->daily();
