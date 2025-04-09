@@ -10,6 +10,6 @@ class EventSeeder extends Seeder
     public function run(): void
     {
         // Generate 100 sample events using the factory
-        Event::factory()->count(100)->create();
+        Event::factory()->count(3)->create();
     }
 }

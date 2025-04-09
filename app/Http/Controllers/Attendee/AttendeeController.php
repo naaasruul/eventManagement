@@ -26,6 +26,18 @@ class AttendeeController extends Controller
         return view('attendee.rsvp', compact('invitation'));
     }
 
+    public function viewRemindRSVP($link)
+    {
+        // Find the invitation by the RSVP link
+        $invitation = Invitation::where('rsvp_link', $link)->first();
+
+        if (!$invitation) {
+            abort(404, 'RSVP link not found.');
+        }
+
+        return view('attendee.rsvp', compact('invitation'));
+    }
+
     public function submitRSVP(Request $request, $link)
     {
         // Submit RSVP response

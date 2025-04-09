@@ -23,6 +23,6 @@ class UserSeeder extends Seeder
         ]);
 
         //   Generate 50 organizers using the factory
-          User::factory()->count(50)->create();
+          User::factory()->count(3)->create();
     }
 }

@@ -33,6 +33,10 @@ class InvitationMail extends Mailable
                         'rsvpLink' => $this->invitation->rsvp_link,
                         'seatType' => $this->invitation->seat_type,
                         'seatNumber' => $this->invitation->seat_number,
+                        'date_start' => $this->invitation->event->date_start,
+                        'time_start' => $this->invitation->event->time_start,
+                        'date_end' => $this->invitation->event->date_end,
+                        'time_end' => $this->invitation->event->time_end,
                     ]);
     }
 }

@@ -107,6 +107,10 @@
                             <th>#</th>
                             <th>Event Name</th>
                             <th>Status</th>
+                            <th>Date Start</th>
+                            <th>Time Start</th>
+                            <th>Date End</th>
+                            <th>Time End</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -124,9 +128,13 @@
                                     <span class="badge bg-danger">Rejected</span>
                                 @endif
                             </td>
+                            <td>{{ $event->date_start }}</td>
+                            <td>{{ $event->time_start }}</td>
+                            <td>{{ $event->date_end }}</td>
+                            <td>{{ $event->time_end }}</td>
                             <td>
                                 <a href="{{ route('organizer.events.invitations', $event->id) }}" class="btn btn-sm btn-primary">Manage Invitations</a>
-                                <a href="{{ route('organizer.events.seating', $event->id) }}" class="btn btn-sm btn-secondary">Assign Seats</a>
+                                {{-- <a href="{{ route('organizer.events.seating', $event->id) }}" class="btn btn-sm btn-secondary">Assign Seats</a> --}}
                             </td>
                         </tr>
                         @endforeach

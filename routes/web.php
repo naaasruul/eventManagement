@@ -44,6 +44,7 @@ Route::prefix('attendee')->name('attendee.')->group(function () {
     Route::get('/rsvp/success', [AttendeeController::class, 'index'])->name('dashboard');
 
     Route::get('/rsvp/{link}', [AttendeeController::class, 'viewRSVP'])->name('rsvp');
+    Route::get('/rsvp/reminder/{link}', [AttendeeController::class, 'viewRemindRSVP'])->name('rsvp-remind');
     Route::post('/rsvp/{link}', [AttendeeController::class, 'submitRSVP'])->name('rsvp.submit');
 });
 Route::get('/events/check-reminders', [OrganizerController::class, 'checkAndSendReminders']);
