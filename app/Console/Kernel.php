@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // Schedule the SendReminders command to run daily
-        $schedule->command('reminders:send')->everyMinute()();
+        $schedule->command('reminders:send')->everyMinute();
     }
 
     /**
