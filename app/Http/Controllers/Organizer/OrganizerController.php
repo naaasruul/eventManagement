@@ -225,7 +225,7 @@ class OrganizerController extends Controller
                 Mail::to($email)->send(new InvitationMail($invitation));
 
                 $invitations[] = $invitation;
-            }
+        }
         }
 
         return redirect()->back()->with('success', count($invitations) . ' invitations sent successfully.');
