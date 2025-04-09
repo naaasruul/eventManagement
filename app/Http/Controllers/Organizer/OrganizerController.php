@@ -199,83 +199,42 @@ class OrganizerController extends Controller
 
         $event = Event::findOrFail($id);
 
-        // Read the uploaded CSV file
         $file = $request->file('csv_file');
-        $csv = Reader::createFromPath($file->getRealPath(), 'r');
-        $csv->setHeaderOffset(0); // Assuming the first row contains headers
-
         $invitations = [];
-        foreach ($csv as $row) {
-            $email = $row['email'] ?? null;
-            $seatType = $row['seat_type'] ?? 'General';
-            $seatNumber = $row['seat_number'] ?? null;
 
-            if ($email) {
-                // Create the invitation
-                $invitation = Invitation::create([
-                    'event_id' => $event->id,
-                    'attendee_email' => $email,
-                    'rsvp_status' => 'pending',
-                    'rsvp_link' => uniqid(),
-                    'seat_type' => $seatType,
-                    'seat_number' => $seatType !== 'General' ? $seatNumber : null,
-                ]);
+        if (($handle = fopen($file->getRealPath(), 'r')) !== false) {
+            // Read the CSV file line by line
+            while (($data = fgetcsv($handle, 1000, ',')) !== false) {
+                $email = trim($data[0]);
+                $seatType = $data[1] ?? 'General'; // Default to 'General' if not provided
+                $seatNumber = $data[2] ?? null;
 
-                // Send the invitation email
-                Mail::to($email)->send(new InvitationMail($invitation));
+                // Validate email
+                if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    // Avoid duplicate invitations
+                    $invitation = Invitation::firstOrCreate(
+                        [
+                            'event_id' => $event->id,
+                            'attendee_email' => $email,
+                        ],
+                        [
+                            'rsvp_status' => 'pending',
+                            'rsvp_link' => uniqid(),
+                            'seat_type' => $seatType,
+                            'seat_number' => $seatType !== 'General' ? $seatNumber : null,
+                        ]
+                    );
 
-                $invitations[] = $invitation;
+                    $invitations[] = $invitation;
+
+                    // Send the invitation email
+                    Mail::to($email)->send(new InvitationMail($invitation));
+                }
+            }
+            fclose($handle);
         }
-        }
 
-        return redirect()->back()->with('success', count($invitations) . ' invitations sent successfully.');
+        return redirect()->back()->with('success', count($invitations) . ' invitations imported and emails sent successfully.');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }
