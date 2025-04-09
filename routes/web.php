@@ -5,6 +5,7 @@ use App\Http\Controllers\Attendee\AttendeeController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Organizer\OrganizerController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
 
 Route::get('/', [AuthController::class, 'index'])->name('showLogin');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -46,3 +47,10 @@ Route::prefix('attendee')->name('attendee.')->group(function () {
     Route::post('/rsvp/{link}', [AttendeeController::class, 'submitRSVP'])->name('rsvp.submit');
 });
 Route::get('/events/check-reminders', [OrganizerController::class, 'checkAndSendReminders']);
+
+
+
+Route::get('/log-test', function () {
+    Log::info('✅ Logging is working!');
+    return 'Check your logs!';
+});
