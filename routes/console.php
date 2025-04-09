@@ -22,21 +22,5 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-// Schedule::call(function () {
-//     Log::info('Scheduled task ran at ' . now());
-//     // Query to find users with null email_verified_at
-//     $users = User::whereNull('email_verified_at')->get();
-//     if ($users->isEmpty()) {
-//         Log::info('No users found with null email_verified_at');
-//     } else {
-//         Log::info('Found ' . $users->count() . ' users with null email_verified_at');
-//         // Update the users' email_verified_at to the current time
-//         $users->each(function ($user) {
-//             Log::info('Updating user: ' . $user->id);
-//             $user->update(['name' => 'memek']);
-//         });
-//     }
-    
-// })->everyFiveSeconds();
 
-Schedule::command('reminders:send')->everyMinute();
+Schedule::command('reminders:send')->daily();
