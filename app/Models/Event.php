@@ -13,7 +13,7 @@ class Event extends Model
         'name',
         'description',
         'status',
-        'created_by',
+        'user_id',
         'date_start',
         'time_start',
         'date_end',
@@ -22,7 +22,7 @@ class Event extends Model
 
     public function organizer()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function invitations()

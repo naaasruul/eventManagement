@@ -16,7 +16,7 @@ class EventFactory extends Factory
             'name' => $this->faker->sentence(3), // Generate a random event name
             'description' => $this->faker->paragraph, // Generate a random description
             'status' => $this->faker->randomElement(['approved', 'pending', 'rejected']), // Random status
-            'created_by' => User::where('role', 'organizer')->inRandomOrder()->first()->id, // Random organizer ID
+            'user_id' => User::where('role', 'organizer')->inRandomOrder()->first()->id, // Random organizer ID
         ];
     }
 }

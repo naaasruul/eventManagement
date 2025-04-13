@@ -18,7 +18,7 @@ class OrganizerController extends Controller
     $organizerId = auth()->id();
 
     // Fetch events created by the organizer
-    $events = Event::where('created_by', $organizerId)->get();
+    $events = Event::where('user_id', $organizerId)->get();
 
     // Count RSVP statuses
     $acceptedRSVPs = Invitation::whereIn('event_id', $events->pluck('id'))->where('rsvp_status', 'accepted')->count();
@@ -44,7 +44,7 @@ class OrganizerController extends Controller
     public function viewEvents(Request $request)
     {
         // Fetch all events created by the logged-in organizer
-        $query = Event::where('created_by', auth()->id());
+        $query = Event::where('user_id', auth()->id());
 
         // Search functionality
         if ($request->has('search') && $request->search !== null) {
@@ -91,7 +91,7 @@ class OrganizerController extends Controller
             'date_end' => $request->date_end,
             'time_end' => $request->time_end,
             'status' => 'pending',
-            'created_by' => auth()->id(),
+            'user_id' => auth()->id(),
         ]);
 
         return redirect()->route('organizer.dashboard')->with('success', 'Event created successfully and sent for approval.');
